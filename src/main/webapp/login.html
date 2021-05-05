@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Firma</a>
+    <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor01" data-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+
+        <ul class="navbar-nav mr-auto">
+            <li>
+                <a class="nav-link" href="index.html">Strona główna</a>
+            </li>
+
+            <li  style="float:right">
+                <a class="nav-link" href="login.html">Zaloguj się</a>
+            </li>
+            <li  style="float:right">
+                <a class="nav-link" href="makeAccount.html">Utwórz konto</a>
+            </li>
+            <li  style="float:right">
+                <a class="nav-link" href="adminLogin.html">Strona admina</a>
+            </li>
+
+
+        </ul>
+    </div>
+</nav>
+
+
+
+<br/>
+<div>
+    <form action="/LoginServlet" method="post">
+
+        <h2>Login</h2>
+        <div class="form-group">
+            <input type="text" class="form-control" id="login" name="login" placeholder="Login" required>
+        </div>
+
+        <div class="form-group">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Hasło" required>
+        </div>
+
+
+
+        <button type="submit" class="btn btn-primary">Zaloguj się</button>
+        <a href="makeAccount.html">Utwórz konto</a>
+
+    </form>
+</div>
+
+
+</body>
+</html>

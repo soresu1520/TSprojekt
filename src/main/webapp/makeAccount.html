@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Firma</a>
+    <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor01" data-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+
+        <ul class="navbar-nav mr-auto">
+            <li>
+                <a class="nav-link" href="index.html">Strona główna</a>
+            </li>
+
+            <li>
+                <a class="nav-link" href="login.html">Zaloguj się</a>
+            </li>
+
+            <li>
+                <a class="nav-link" href="makeAccount.html">Utwórz konto</a>
+            </li>
+
+            <li style="align-self: end">
+                <a class="nav-link" href="adminLogin.html">Strona admina</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div>
+    <br/>
+    <form action="/MakeAccountServlet" method="get">
+
+        <h2>Utwórz konto</h2>
+        <legend>Podaj dane</legend>
+        <div class="form-group">
+
+            <input type="text" class="form-control" id="name" name="name" placeholder="Imię" required>
+        </div>
+        <div class="form-group">
+
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Nazwisko" required>
+        </div>
+
+        <div class="form-group">
+
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+
+            <input type="text" class="form-control" id="login" name="login" placeholder="Login" required>
+        </div>
+
+        <div class="form-group">
+
+            <input type="password" class="form-control" id="password" name="password" placeholder="Hasło" required>
+        </div>
+
+        <div class="form-group">
+            <legend>Wybierz dział</legend>
+            <select class="form-control" id="metric" name="metric" type="text" >
+                <option>Dział1</option>
+                <option>Dział2</option>
+                <option>Dział3</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <input type="text" class="form-control" id="job" name="job" placeholder="Stanowisko" required>
+        </div>
+
+
+        <div class="form-group">
+            <input type="number" min="0" max="40" step="1" class="form-control" id="years" name="years" placeholder="Lata stażu" required>
+        </div>
+
+        <div class="form-group">
+            <legend>Wybierz wykształcenie</legend>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" checked="">
+                <label class="custom-control-label" for="customRadio1">Zasadnicza szkoła zawodowa</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+                <label class="custom-control-label" for="customRadio2">Średnia szkoła zawodowa</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="customRadio4" name="customRadio" class="custom-control-input">
+                <label class="custom-control-label" for="customRadio4">Średnia szkoła ogólnokształcąca</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="customRadio5" name="customRadio" class="custom-control-input">
+                <label class="custom-control-label" for="customRadio5">Szkoła policealna</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="customRadio6" name="customRadio" class="custom-control-input">
+                <label class="custom-control-label" for="customRadio6">Szkoła wyższa</label>
+            </div>
+        </div>
+        </fieldset>
+
+
+        <button type="submit" class="btn btn-primary" style="margin: 10px">Utwórz konto</button>
+    </form>
+</div>
+
+
+
+</body>
+</html>

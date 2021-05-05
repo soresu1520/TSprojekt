@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:font-size="http://java.sun.com/jsf/html" xmlns:margin-left="http://xmlns.jcp.org/jsf/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link href="bootstrap.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Firma</a>
+        <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor01" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+
+            <ul class="navbar-nav mr-auto">
+                <li>
+                    <a class="nav-link" href="index.html">Strona główna</a>
+                </li>
+
+                <li  style="float:right">
+                    <a class="nav-link" href="login.html">Zaloguj się</a>
+                </li>
+                <li  style="float:right">
+                    <a class="nav-link" href="makeAccount.html">Utwórz konto</a>
+                </li>
+                <li style="align-self: end">
+                    <a class="nav-link" href="adminLogin.html">Strona admina</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+    <img src="Images/humansWorking.jpg" alt="human" style="width:100%;">
+        <div class="bottom-left" >Złóż podanie o urlop już dziś <br/>
+            <button class="btn btn-primary btn-lg btn-block" type="button" onclick="location.href='login.html'">Zaloguj się</button>
+        </div>
+
+    </div>
+    <br/>
+
+
+    <div class="card mb-3">
+        <h3 class="card-header">Informacje</h3>
+
+        <div class="card-body">
+            <h4 class="card-title">Ile należy ci się dni urlopu</h4>
+            <p class="card-text">Dni urlopu naliczane są na podstawie lat stażu pracownika. Po 10 latach pracy należy się 26 dni urlopu,
+                a wcześniej 20. Do lat stażu wliczana jest edukacja pracownika. </p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Za zasadniczą szkołę zawodową - do 3 lat</li>
+                <li class="list-group-item">Za średnią szkołę zawodową - do 5 lat</li>
+                <li class="list-group-item">Za szkołę średnią ogólnokształcącą - 5 lat</li>
+                <li class="list-group-item">Za szkołę policealną - 6 lat</li>
+                <li class="list-group-item">Za szkołę wyższą - 8 lat</li>
+            </ul>
+            <br/>
+            <p>Lata uzyskane za poszczególne stopnie edukacji nie są sumowane.</p>
+        </div>
+        <div class="card-footer text-muted">
+
+        </div>
+    </div>
+
+
+</body>
+</html>

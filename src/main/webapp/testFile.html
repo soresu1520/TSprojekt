@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="bootstrap.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Firma</a>
+    <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor01" data-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+
+        <ul class="navbar-nav mr-auto">
+            <li>
+                <a class="nav-link" href="index.html">Strona główna</a>
+            </li>
+
+            <li  style="float:right">
+                <a class="nav-link" href="login.html">Zaloguj się</a>
+            </li>
+            <li  style="float:right">
+                <a class="nav-link" href="makeAccount.html">Utwórz konto</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<h2 style="margin: 20px">Zaplanowane urlopy</h2>
+
+<div style="margin: 20px">
+    <table class="table table-hover" >
+        <thead>
+        <tr  class="table-primary">
+            <th class="col">Data początkowa</th>
+            <th class="col" >Data końcowa</th>
+            <th class="col">Ilość wykorzystanych dni</th>
+            <th class="col">Status</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <td>text</td>
+        <td>text</td>
+        <td>text</td>
+        <td>text</td>
+
+        </tbody>
+    </table>
+</div>
+<div style="width: 94%">
+    <button  class="btn btn-primary btn-lg btn-block" type="button" style="margin: 40px" onclick="location.href='takeVacation.jsp'"> Zgłoś urlop</button>
+
+</div>
+
+<div>
+    <form action="/VacationServlet" method="post">
+
+        <div>
+            <label for="start">Data początkowa</label>
+            <input type="date" id="start" name="start"
+                   value="today"
+                   min="today" max="2021-12-31"
+                   required >
+        </div>
+
+        <fieldset class="form-group">
+            <label for="time">Ilość dni</label>
+            <input type="range" min="1" max="40" value="7" name="time" class="custom-range" id="time" oninput="this.nextElementSibling.value = this.value"
+                   required>
+            <output>50</output>
+        </fieldset>
+
+        <div class="form-group">
+            <label  for="metric" >Rodzaj</label>
+            <select class="form-control" id="metric" name="metric" type="text" >
+                <option>Płatny</option>
+                <option>Niepłatny</option>
+                <option>Zdrowotny</option>
+            </select>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Potwierdź</button>
+
+
+    </form>
+</div>
+
+
+
+</body>
+</html>
