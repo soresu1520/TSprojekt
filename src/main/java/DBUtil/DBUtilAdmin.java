@@ -21,7 +21,7 @@ public class DBUtilAdmin extends DBUtil {
     }
 
 
-    //@Override
+
     public List<WorkLeave> getWorkLeavesToDelete() throws Exception {
 
         List<WorkLeave> workLeaves = new ArrayList<>();
@@ -71,7 +71,7 @@ public class DBUtilAdmin extends DBUtil {
 
     }
 
-    //@Override
+
     public List<WorkLeave> getWorkLeavesToModify() throws Exception {
 
         List<WorkLeave> workLeaves = new ArrayList<>();
@@ -184,7 +184,36 @@ public class DBUtilAdmin extends DBUtil {
 
     }
 
+    public void updateLeaveCancel(int id) throws Exception {
 
+        Connection conn = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            // polaczenie z BD
+            conn = DriverManager.getConnection(URL, name, password);
+
+            // zapytanie UPDATE
+            String sql = "UPDATE work_leaves SET leave_status=?" +
+                    "WHERE id =?";
+
+            statement = conn.prepareStatement(sql);
+            statement.setString(1, "odrzucono modyfikacje");
+            statement.setInt(2, id);
+
+
+            // wykonanie zapytania
+            statement.execute();
+
+        } finally {
+
+            // zamkniecie obiektow JDBC
+            close(conn, statement, null);
+
+        }
+
+    }
 
 
     public void setName(String name) {

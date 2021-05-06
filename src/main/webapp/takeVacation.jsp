@@ -34,7 +34,7 @@
 
 <div>
     <h2>Formularz zgłoszeniowy</h2>
-    <form action="/VacationServlet" method="post">
+    <form action="VacationServlet" method="post">
 
         <div>
             <label for="start">Data początkowa</label>

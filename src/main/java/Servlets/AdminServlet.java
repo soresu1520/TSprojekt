@@ -63,8 +63,8 @@ public class AdminServlet extends HttpServlet{
             }
 
             // dodanie listy do obiektu zadania
-            request.setAttribute("ToModify", workLeavesToModify);
-            request.setAttribute("ToDelete", workLeavesToDelete);
+            request.setAttribute("TO_MODIFY", workLeavesToModify);
+            request.setAttribute("TO_DELETE", workLeavesToDelete);
 
 
             dispatcher.forward(request, response);
@@ -76,8 +76,53 @@ public class AdminServlet extends HttpServlet{
 
 
     }
-    // do pracownika
-    // tu tylko status
+
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+            ServletException, IOException {
+
+
+        try {
+
+            // odczytanie zadania
+            String command = request.getParameter("command");
+
+            if (command == null)
+                command = "LIST";
+
+            switch (command) {
+
+                case "LIST":
+                    listLeaves(request, response);
+                    break;
+
+
+                case "CANCEL":
+                    updateLeaveCancel(request, response);
+                    break;
+
+                case "CANCEL2":
+                    updateLeaveCancel2(request, response);
+                    break;
+                case "UPDATE":
+                    updatePhone(request, response);
+                    break;
+
+                case "DELETE":
+                    deleteLeave(request, response);
+                    break;
+
+                default:
+                    listLeaves(request, response);
+            }
+
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
+
+    }
+
+
     private void updatePhone(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         /* LocalDate date = LocalDate.parse(request.getParameter("start"));
@@ -96,10 +141,33 @@ public class AdminServlet extends HttpServlet{
 
         dbUtil.updateLeave(id);
 
+        listLeaves(request, response);
 
-        listLeavesModify(request, response);
 
     }
+
+    private void updateLeaveCancel(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        dbUtil.updateLeaveCancel(id);
+
+        listLeaves(request, response);
+
+    }
+
+    private void updateLeaveCancel2(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        dbUtil.updateLeaveCancel(id);
+
+        listLeaves(request, response);
+
+
+    }
+
 
     private void deleteLeave(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -109,18 +177,19 @@ public class AdminServlet extends HttpServlet{
         // usuniecie telefonu z BD
         dbUtil.deleteLeave(id);
 
-        // wyslanie danych do strony z lista telefonow
+
         listLeaves(request, response);
+
 
     }
 
     private void listLeaves(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         List<WorkLeave> workLeaves = dbUtil.getWorkLeavesToDelete();
-
+        List<WorkLeave> workLeaves2 = dbUtil.getWorkLeavesToModify();
         // dodanie listy do obiektu zadania
-        request.setAttribute("ToDelete", workLeaves);
-
+        request.setAttribute("TO_DELETE", workLeaves);
+        request.setAttribute("TO_MODIFY", workLeaves2);
         // dodanie request dispatcher
         RequestDispatcher dispatcher = request.getRequestDispatcher("/administratoView.jsp");
 
@@ -129,20 +198,6 @@ public class AdminServlet extends HttpServlet{
 
     }
 
-    private void listLeavesModify(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        List<WorkLeave> workLeaves = dbUtil.getWorkLeavesToDelete();
-
-        // dodanie listy do obiektu zadania
-        request.setAttribute("ToModify", workLeaves);
-
-        // dodanie request dispatcher
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/administratoView.jsp");
-
-        // przekazanie do JSP
-        dispatcher.forward(request, response);
-
-    }
 
 
     private boolean validate(String name, String pass) {

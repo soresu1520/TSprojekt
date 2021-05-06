@@ -10,13 +10,16 @@ public class ManagerView {
     private String position;
     private int leaveDays;
     private int availableDays;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String startDate;
+    private String endDate;
     private int days;
     private String leaveType;
     private String leaveStatus;
+    private int depid;
 
-    public ManagerView(int employeeId, int leaveId, String employeeName, String position, int leaveDays, int availableDays, LocalDate startDate, LocalDate endDate, int days, String leaveType, String leaveStatus) {
+
+
+    public ManagerView(int employeeId, int leaveId, String employeeName, String position, int leaveDays, int availableDays, String startDate, String endDate, int days, String leaveType, String leaveStatus, int depid) {
         this.employeeId = employeeId;
         this.leaveId = leaveId;
         this.employeeName = employeeName;
@@ -28,6 +31,7 @@ public class ManagerView {
         this.days = days;
         this.leaveType = leaveType;
         this.leaveStatus = leaveStatus;
+        this.depid = depid;
     }
 
     public int getEmployeeId() {
@@ -78,19 +82,19 @@ public class ManagerView {
         this.availableDays = availableDays;
     }
 
-    public LocalDate getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
@@ -117,4 +121,9 @@ public class ManagerView {
     public void setLeaveStatus(String leaveStatus) {
         this.leaveStatus = leaveStatus;
     }
+
+
+    public int getDepid() { return depid; }
+
+    public void setDepid(int depid) { this.depid = depid; }
 }

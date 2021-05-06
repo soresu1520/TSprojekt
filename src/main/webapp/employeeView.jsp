@@ -46,13 +46,12 @@
             <th class="col">Status</th>
             <th class="col"></th>
             <th class="col"></th>
-
-
         </tr>
         </thead>
 
         <tbody>
-        <td>text</td>
+
+
         <td>text</td>
         <td>text</td>
         <td>text</td>
