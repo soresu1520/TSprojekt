@@ -37,6 +37,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Initiate connection to database, calls DBUtilEmployee class
+     *
      * @param config
      * @throws ServletException
      */
@@ -56,6 +57,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Opens correct jsp files and fills table with data, that belongs to user
+     *
      * @param request
      * @param response
      * @throws ServletException
@@ -74,7 +76,7 @@ public class LoginServlet extends HttpServlet {
         dbUtil.setName(name);
         dbUtil.setPassword(password);
         RequestDispatcher dispatcher;
-        List<Employee>employees = new ArrayList<>();
+        List<Employee> employees = new ArrayList<>();
 
         if (validate(name, password)) {
 
@@ -90,9 +92,9 @@ public class LoginServlet extends HttpServlet {
                 e.printStackTrace();
             }
 
-            if(who==1)
+            if (who == 1)
                 dispatcher = request.getRequestDispatcher("/bossView.jsp");
-            else if(who==2)
+            else if (who == 2)
                 dispatcher = request.getRequestDispatcher("/employeeView.jsp");
             else
                 dispatcher = request.getRequestDispatcher("/index.html");
@@ -116,12 +118,12 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("WORK_LEAVES", workLeavesToAccept);
             request.setAttribute("REST", workLeavesAccepted);
             request.setAttribute("LEAVE_ARCHIVE", workArchivesEmployee);
-            request.setAttribute("USER",employees);
+            request.setAttribute("USER", employees);
             dispatcher.forward(request, response);
         } else {
 
             dispatcher = request.getRequestDispatcher("/messages.jsp");
-            msg="Niepoprawne dane logowania :(";
+            msg = "Niepoprawne dane logowania :(";
             request.setAttribute("message", msg);
             dispatcher.forward(request, response);
         }
@@ -131,6 +133,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Checks what command was used on site and calls correct method
+     *
      * @param request
      * @param response
      * @throws ServletException
@@ -156,10 +159,10 @@ public class LoginServlet extends HttpServlet {
                     deleteEmployeeLeave(request, response);
                     break;
                 case "UPDATE_EMPLOYEE":
-                    loadLeave(request,response);
+                    loadLeave(request, response);
                     break;
                 case "UPDATE":
-                    updateLeave(request,response);
+                    updateLeave(request, response);
                     break;
                 case "ACCEPT_MANAGER":
                     updateAccept(request, response);
@@ -179,12 +182,13 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Modifies data of chosen work_leave entry
+     *
      * @param request
      * @param response
      * @throws Exception
      */
     private void updateLeave(HttpServletRequest request, HttpServletResponse response) throws
-            Exception  {
+            Exception {
 
         String name = dbUtil.getName();
         int idEmpl = dbUtil.getEmployeeData(name).getId();
@@ -195,33 +199,51 @@ public class LoginServlet extends HttpServlet {
         String endDAYS = endDate.toString();
         int days = Integer.parseInt(request.getParameter("time"));
         String leaveType = request.getParameter("metric");
+        int daysAv = dbUtil.getEmployeeData(name).getAvailableDays();
+
+        WorkLeave workLeave = new WorkLeave(id, startDate, endDAYS, days, leaveType, "do modyfikacji", idEmpl);
 
 
-        WorkLeave workLeave = new WorkLeave(id,startDate,endDAYS,days,leaveType,"do modyfikacji",idEmpl);
-        dbUtil.updateLeaveModify(id,workLeave);
-        listEmployeeView(request,response);
+        if (date.isBefore(LocalDate.now())) {
+            if (days < daysAv) {
+                dbUtil.updateLeaveModify(id, workLeave);
+                listEmployeeView(request, response);
+            } else {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/takeVacation.jsp");
+                msg = "Masz za mało wolnego :(";
+                request.setAttribute("msg", msg);
+                dispatcher.forward(request, response);
+            }
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/takeVacation.jsp");
+            msg = "Nie możesz wziać urlopu w przeszłości :(";
+            request.setAttribute("msg", msg);
+            dispatcher.forward(request, response);
+        }
+
     }
-
 
 
     /**
      * Changes leave_status from work_leave table to 'do usuniecia'
+     *
      * @param request
      * @param response
      * @throws Exception
      */
     private void deleteEmployeeLeave(HttpServletRequest request, HttpServletResponse response) throws
-            Exception  {
+            Exception {
 
         int id = Integer.parseInt(request.getParameter("leaveID"));
 
         dbUtil.updateLeave(id);
-        listEmployeeView(request,response);
+        listEmployeeView(request, response);
     }
 
 
     /**
      * Sends data of chosen entry into modify.jsp
+     *
      * @param request
      * @param response
      * @throws Exception
@@ -231,7 +253,7 @@ public class LoginServlet extends HttpServlet {
         String id = request.getParameter("leaveID");
 
         WorkLeave workLeave = dbUtil.getWorkLeave(Integer.parseInt(id));
-        request.setAttribute("WORKLEAVE",workLeave);
+        request.setAttribute("WORKLEAVE", workLeave);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/modify.jsp");
         dispatcher.forward(request, response);
@@ -240,6 +262,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Creates new work_leave entry
+     *
      * @param request
      * @param response
      * @throws Exception
@@ -253,19 +276,25 @@ public class LoginServlet extends HttpServlet {
         int employeeId = dbUtil.getEmployeeData(name).getId();
         int daysAv = dbUtil.getEmployeeData(name).getAvailableDays();
 
-        DateTimeFormatter f = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
-        LocalDate ld = LocalDate.parse(startDate, f );
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate ld = LocalDate.parse(startDate, f);
         String endDate = String.valueOf(ld.plusDays(days));
 
         WorkLeave workLeave = new WorkLeave(startDate, endDate, days, leaveType, "czeka na akceptację", employeeId);
 
-        if(days<daysAv) {
-            dbUtil.addLeave(workLeave);
-            listEmployeeView(request, response);
-        }
-        else{
+        if (ld.isBefore(LocalDate.now())) {
+            if (days < daysAv) {
+                dbUtil.addLeave(workLeave);
+                listEmployeeView(request, response);
+            } else {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/takeVacation.jsp");
+                msg = "Masz za mało wolnego :(";
+                request.setAttribute("msg", msg);
+                dispatcher.forward(request, response);
+            }
+        } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/takeVacation.jsp");
-            msg="Masz za mało wolnego :(";
+            msg = "Nie możesz wziać urlopu w przeszłości :(";
             request.setAttribute("msg", msg);
             dispatcher.forward(request, response);
         }
@@ -274,6 +303,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Deletes chosen entry
+     *
      * @param request
      * @param response
      * @throws Exception
@@ -286,6 +316,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Changes leave_status from work_leaves table into 'zaakceptowany'
+     *
      * @param request
      * @param response
      * @throws Exception
@@ -298,6 +329,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Creates data to employees tables
+     *
      * @param request
      * @param response
      * @throws Exception
@@ -311,13 +343,14 @@ public class LoginServlet extends HttpServlet {
         Employee employee = dbUtil.getEmployeeData(name);
         employees.add(employee);
 
-        request.setAttribute("WORK_LEAVE",workLeaves);
-        request.setAttribute("LEAVE_ARCHIVE",leavesArchive);
-        request.setAttribute("USER",employees);
+        request.setAttribute("WORK_LEAVE", workLeaves);
+        request.setAttribute("LEAVE_ARCHIVE", leavesArchive);
+        request.setAttribute("USER", employees);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/employeeView.jsp");
-        dispatcher.forward(request,response);
+        dispatcher.forward(request, response);
     }
+
     /**
      * Creates data to manager tables
      * @param request
@@ -328,11 +361,11 @@ public class LoginServlet extends HttpServlet {
 
         String name = dbUtil.getName();
         int id = dbUtil.getManagerData(name).getDepartmentId();
-        List<ManagerView> managerViews = dbUtil.getManagerView(id,"czeka na akceptację");
-        List<ManagerView> managerViews2 = dbUtil.getManagerView(id,"zaakceptowany");
+        List<ManagerView> managerViews = dbUtil.getManagerView(id, "czeka na akceptację");
+        List<ManagerView> managerViews2 = dbUtil.getManagerView(id, "zaakceptowany");
 
-        request.setAttribute("WORK_LEAVES",managerViews);
-        request.setAttribute("REST",managerViews2);
+        request.setAttribute("WORK_LEAVES", managerViews);
+        request.setAttribute("REST", managerViews2);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/bossView.jsp");
 
@@ -366,7 +399,6 @@ public class LoginServlet extends HttpServlet {
         }
         return status;
     }
-
 
 
 }
