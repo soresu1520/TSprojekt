@@ -204,23 +204,29 @@ public class LoginServlet extends HttpServlet {
 
         int daysMinusWeekends = checkWeekend(date, days);
         String endDate1 = String.valueOf(date.plusDays(daysMinusWeekends));
-
+        boolean isCorrect = checkDate(date, daysMinusWeekends);
         WorkLeave workLeave = new WorkLeave(id, startDate, endDate1, days, leaveType, "do modyfikacji", idEmpl);
 
-
-        if (date.isAfter(LocalDate.now())) {
-            if (days < daysAv) {
-                dbUtil.updateLeaveModify(id, workLeave);
-                listEmployeeView(request, response);
+        if (isCorrect) {
+            if (date.isAfter(LocalDate.now())) {
+                if (days < daysAv) {
+                    dbUtil.updateLeaveModify(id, workLeave);
+                    listEmployeeView(request, response);
+                } else {
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/modify.jsp");
+                    msg = "Masz za mało wolnego :(";
+                    request.setAttribute("msg", msg);
+                    dispatcher.forward(request, response);
+                }
             } else {
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/modify.jsp");
-                msg = "Masz za mało wolnego :(";
+                msg = "Nie możesz wziać urlopu w przeszłości :(";
                 request.setAttribute("msg", msg);
                 dispatcher.forward(request, response);
             }
         } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/modify.jsp");
-            msg = "Nie możesz wziać urlopu w przeszłości :(";
+            msg = "Już masz urlop w tym terminie :(";
             request.setAttribute("msg", msg);
             dispatcher.forward(request, response);
         }
@@ -286,22 +292,30 @@ public class LoginServlet extends HttpServlet {
         int daysMinusWeekends = checkWeekend(ld, days);
         String endDate = String.valueOf(ld.plusDays(daysMinusWeekends));
 
+        boolean isCorrect = checkDate(ld, daysMinusWeekends);
+
 
         WorkLeave workLeave = new WorkLeave(startDate, endDate, days, leaveType, "czeka na akceptację", employeeId);
-
-        if (ld.isAfter(LocalDate.now())) {
-            if (days < daysAv) {
-                dbUtil.addLeave(workLeave);
-                listEmployeeView(request, response);
+        if (isCorrect) {
+            if (ld.isAfter(LocalDate.now())) {
+                if (days < daysAv) {
+                    dbUtil.addLeave(workLeave);
+                    listEmployeeView(request, response);
+                } else {
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/takeVacation.jsp");
+                    msg = "Masz za mało wolnego :(";
+                    request.setAttribute("msg", msg);
+                    dispatcher.forward(request, response);
+                }
             } else {
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/takeVacation.jsp");
-                msg = "Masz za mało wolnego :(";
+                msg = "Nie możesz wziać urlopu w przeszłości :(";
                 request.setAttribute("msg", msg);
                 dispatcher.forward(request, response);
             }
         } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/takeVacation.jsp");
-            msg = "Nie możesz wziać urlopu w przeszłości :(";
+            msg = "Juz masz urlop w tym terminie :(";
             request.setAttribute("msg", msg);
             dispatcher.forward(request, response);
         }
@@ -411,6 +425,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Checks how many weekend days happen during leave
+     *
      * @param start
      * @param days
      * @return
@@ -427,6 +442,37 @@ public class LoginServlet extends HttpServlet {
 
         return avaiDays;
     }
+
+    /**
+     * Checks if there are leaves during chosen time
+     *
+     * @param start
+     * @param days
+     * @return
+     * @throws Exception
+     */
+    private boolean checkDate(LocalDate start, int days) throws Exception {
+        boolean isCorrect = true;
+
+        String name = dbUtil.getName();
+        int id = dbUtil.getEmployeeData(name).getId();
+        List<WorkLeave> workLeaves = dbUtil.getWorkLeaves(id);
+
+        for (int i = 0; i < workLeaves.size(); i++) {
+
+            for (int j = 0; j <= days; j++) {
+
+                if (start.plusDays(j).isAfter(LocalDate.parse(workLeaves.get(i).getStartDate())) && start.plusDays(j).isBefore(LocalDate.parse(workLeaves.get(i).getEndDate())))
+                    isCorrect = false;
+
+            }
+
+        }
+
+
+        return isCorrect;
+    }
+
 }
 
 
