@@ -10,6 +10,8 @@ public class Manager {
     private String email;
     private int departmentId;
 
+    public Manager(){}
+
     public Manager(int id, String login, String password, String firstName, String lastName, String email, int departmentId) {
         this.id = id;
         this.login = login;

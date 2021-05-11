@@ -45,31 +45,49 @@
             <th class="col">Data początkowa</th>
             <th class="col">Data końcowa</th>
             <th class="col">Dni</th>
-            <th class="col">Status</th>
             <th class="col">Dostępne dni</th>
+            <th class="col">Status</th>
+            <th class="col">Typ</th>
             <th class="col"></th>
             <th class="col"></th>
         </tr>
         </thead>
 
+    <c:forEach var="tmpManagerView" items="${WORK_LEAVES}">
+
+        <c:url var="updateLink" value="LoginServlet">
+            <c:param name="command" value="ACCEPT_MANAGER"></c:param>
+            <c:param name="id" value="${tmpManagerView.leaveId}"></c:param>
+        </c:url>
+
+        <c:url var="cancelLink" value="LoginServlet">
+            <c:param name="command" value="CANCEL_MANAGER"></c:param>
+            <c:param name="id" value="${tmpManagerView.leaveId}"></c:param>
+
+        </c:url>
 
         <tbody>
-        <td>text</td>
-        <td>text</td>
-        <td>text</td>
-        <td>text</td>
-        <td>text</td>
-        <td>text</td>
-        <td>text</td>
+        <td>${tmpManagerView.employeeName}</td>
+        <td>${tmpManagerView.depid}</td>
+        <td>${tmpManagerView.startDate}</td>
+        <td>${tmpManagerView.endDate}</td>
+        <td>${tmpManagerView.leaveDays}</td>
+        <td>${tmpManagerView.availableDays}</td>
+        <td>${tmpManagerView.leaveStatus}</td>
+        <td>${tmpManagerView.leaveType}</td>
+
+
         <td><a href="${updateLink}">
             <button type="button" class="btn btn-success">Zatwierdź</button>
         </a></td>
-        <td><a href="${updateLink}">
+
+        <td><a href="${cancelLink}">
             <button type="button" class="btn btn-danger">Odrzuć</button>
         </a></td>
 
-        </tbody>
 
+        </tbody>
+    </c:forEach>
     </table>
 </div>
 
@@ -86,22 +104,25 @@
             <th class="col">Dni</th>
             <th class="col">Dostępne dni</th>
             <th class="col">Status</th>
+            <th class="col">Typ</th>
 
 
         </tr>
         </thead>
-
+<c:forEach var="tmpManagerView" items="${REST}">
 
         <tbody>
-        <td>text</td>
-        <td>text</td>
-        <td>text</td>
-        <td>text</td>
-        <td>text</td>
-        <td>text</td>
-        <td>text</td>
-        </tbody>
+        <td>${tmpManagerView.employeeName}</td>
+        <td>${tmpManagerView.depid}</td>
+        <td>${tmpManagerView.startDate}</td>
+        <td>${tmpManagerView.endDate}</td>
+        <td>${tmpManagerView.leaveDays}</td>
+        <td>${tmpManagerView.availableDays}</td>
+        <td>${tmpManagerView.leaveStatus}</td>
+        <td>${tmpManagerView.leaveType}</td>
 
+        </tbody>
+</c:forEach>
     </table>
 </div>
 

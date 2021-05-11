@@ -10,6 +10,7 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="stylesheet" href="bootstrap.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -38,9 +39,12 @@
 
 <div style="display: inline-block">
     <br/>
-    <form action="/" method="post">
+    <form action="LoginServlet" method="get">
 
         <h2>Zmień dane</h2>
+        <input type="hidden" name="command" value="UPDATE"/>
+        <input type="hidden" name="id" value="${WORKLEAVE.id}"/>
+
 
         <div>
             <label for="start">Data początkowa</label>
@@ -77,9 +81,9 @@
 <div class="card border-primary mb-3" style="width: 400px;  display: inline-block; vertical-align: top; margin: 20px; margin-left: 240px">
     <div class="card-header">Dane urlopu</div>
     <div class="card-body">
-        <p class="card-text">Data urlopu:</p>
-        <p class="card-text">Czas trwania:</p>
-        <p class="card-text">Pozostałe dni wolne:</p>
+        <p class="card-text">Początek: ${WORKLEAVE.startDate}</p>
+        <p class="card-text">Koniec: ${WORKLEAVE.endDate}</p>
+        <p class="card-text">Czas trwania: ${WORKLEAVE.days}</p>
     </div>
 </div>
 

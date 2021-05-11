@@ -13,6 +13,8 @@ public class Employee {
     private int leaveDays;
     private int availableDays;
 
+    public Employee(){}
+
     public Employee(int id, String login, String password, String firstName, String lastName, String email, int departmentId, String position, int leaveDays, int availableDays) {
         this.id = id;
         this.login = login;

@@ -10,6 +10,8 @@ public class WorkLeave {
     private String leaveStatus;
     private int employeeId;
 
+    public WorkLeave(){}
+
     public WorkLeave(int id, String startDate, String endDate, int days, String leaveType, String leaveStatus, int employeeId) {
         this.id = id;
         this.startDate = startDate;

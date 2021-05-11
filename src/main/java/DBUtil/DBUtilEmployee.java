@@ -1,9 +1,7 @@
 package DBUtil;
 
-import DAO.Employee;
-import DAO.Manager;
-import DAO.ManagerView;
-import DAO.WorkLeave;
+import DAO.*;
+
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -109,7 +107,7 @@ public class DBUtilEmployee extends DBUtil{
                 int ids = resultSet.getInt("employee_id");
                 int idLeave = resultSet.getInt("leave_id");
                 String name= resultSet.getString("employee_name");
-                String position = resultSet.getString("position");
+                String position = resultSet.getString("eposition");
                 int days = resultSet.getInt("leave_days");
                 int availabledays = resultSet.getInt("avaiable_days");
                 String startDate = resultSet.getString("start_date");
@@ -137,7 +135,7 @@ public class DBUtilEmployee extends DBUtil{
 
 
     //get do danych managera
-    public List<Manager> getManagerData(int id)  throws Exception{
+    public List<Manager> getManagerList()  throws Exception{
 
         List<Manager> managers = new ArrayList<>();
 
@@ -151,7 +149,7 @@ public class DBUtilEmployee extends DBUtil{
             conn = DriverManager.getConnection(URL, name, password);
 
             // zapytanie SELECT
-            String sql = "SELECT * FROM managers WHERE id ="+id;
+            String sql = "SELECT * FROM managers";
             statement = conn.createStatement();
 
 
@@ -172,7 +170,7 @@ public class DBUtilEmployee extends DBUtil{
 
 
                 // dodanie do listy nowego obiektu
-                managers.add(new Manager(id, login,pass, name,lname,email,dep));
+                managers.add(new Manager(ids, login,pass, name,lname,email,dep));
 
             }
 
@@ -220,14 +218,27 @@ public class DBUtilEmployee extends DBUtil{
                 int dep = resultSet.getInt("dep_id");
 
 
-    public List<Employee> getEmployeeData(int id)  throws Exception{
+                // dodanie do listy nowego obiektu
+                managers=new Manager(ids, login, pass, name,lname,email,dep);
 
-        List<Employee> employees = new ArrayList<>();
+            }
+
+        } finally {
+
+            // zamkniecie obiektow JDBC
+            close(conn, statement, resultSet);
+        }
+
+        return managers;
+    }
+
+    //weź dane pracownika o danym loginie
+    public Employee getEmployeeData(String login)  throws Exception{
 
         Connection conn = null;
         Statement statement = null;
         ResultSet resultSet = null;
-
+        Employee employees = new Employee();
         try {
 
             // polaczenie z BD
@@ -257,7 +268,55 @@ public class DBUtilEmployee extends DBUtil{
                 int avDays = resultSet.getInt("avaiable_days");
 
                 // dodanie do listy nowego obiektu
-                employees.add(new Employee(id, login,pass, name,lname,email,dep,position,leaveDays,avDays));
+                employees = new Employee(ids, login,pass, name,lname,email,dep,position,leaveDays,avDays);
+
+            }
+
+        } finally {
+
+            // zamkniecie obiektow JDBC
+            close(conn, statement, resultSet);
+        }
+
+        return employees;
+    }
+
+    public List<Employee> getEmployeeList(int id)  throws Exception{
+
+        Connection conn = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        List<Employee>employees = new ArrayList<>();
+        try {
+
+            // polaczenie z BD
+            conn = DriverManager.getConnection(URL, name, password);
+
+            // zapytanie SELECT
+            String sql = "SELECT * FROM employees";
+            statement = conn.createStatement();
+
+
+            // wykonanie zapytania SQL
+            resultSet = statement.executeQuery(sql);
+
+            // przetworzenie wyniku zapytania
+            while (resultSet.next()) {
+
+                // pobranie danych z rzedu
+                int ids = resultSet.getInt("id");
+                String login = resultSet.getString("login");
+                String pass = resultSet.getString("pass");
+                String name = resultSet.getString("first_name");
+                String lname = resultSet.getString("last_name");
+                String email = resultSet.getString("email");
+                int dep = resultSet.getInt("dep_id");
+                String position = resultSet.getString("eposition");
+                int leaveDays = resultSet.getInt("leave_days");
+                int avDays = resultSet.getInt("avaiable_days");
+
+                // dodanie do listy nowego obiektu
+                employees.add(new Employee(ids, login,pass, name,lname,email,dep,position,leaveDays,avDays));
 
             }
 
@@ -315,12 +374,16 @@ public class DBUtilEmployee extends DBUtil{
             conn = DriverManager.getConnection(URL, name, password);
 
             // zapytanie UPDATE
-            String sql = "UPDATE work_leaves SET leave_status=?"+
+            String sql = "UPDATE work_leaves SET leave_status=?,start_date=?, days=?,end_date=?,leave_type=?"+
                     "where id =?";
 
             statement = conn.prepareStatement(sql);
             statement.setString(1, "do modyfikacji");
-            statement.setInt(2, id);
+            statement.setInt(3,workLeave.getDays());
+            statement.setString(2,workLeave.getStartDate());
+            statement.setString(4,workLeave.getEndDate());
+            statement.setString(5,workLeave.getLeaveType());
+            statement.setInt(6, id);
 
 
             // wykonanie zapytania
@@ -335,7 +398,36 @@ public class DBUtilEmployee extends DBUtil{
 
     }
 
+    public void updateLeaveAccept(int id) throws Exception {
 
+        Connection conn = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            // polaczenie z BD
+            conn = DriverManager.getConnection(URL, name, password);
+
+            // zapytanie UPDATE
+            String sql = "UPDATE work_leaves SET leave_status=?" +
+                    "WHERE id =?";
+
+            statement = conn.prepareStatement(sql);
+            statement.setString(1, "zaakceptowany");
+            statement.setInt(2, id);
+
+
+            // wykonanie zapytania
+            statement.execute();
+
+        } finally {
+
+            // zamkniecie obiektow JDBC
+            close(conn, statement, null);
+
+        }
+
+    }
 
 
 
@@ -373,7 +465,7 @@ public class DBUtilEmployee extends DBUtil{
 
     }
 
-    public void updateLeaveCancel(int id,WorkLeave workLeave) throws Exception {
+    public void updateLeaveCancel(int id) throws Exception {
 
         Connection conn = null;
         PreparedStatement statement = null;
@@ -522,6 +614,53 @@ public class DBUtilEmployee extends DBUtil{
         return leavesArchives;
     }
 
+
+    public WorkLeave getWorkLeave(int id) throws Exception{
+        WorkLeave workLeave = new WorkLeave();
+
+        Connection conn = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+
+            // polaczenie z BD
+            conn = DriverManager.getConnection(URL, name, password);
+
+            // zapytanie SELECT
+            String sql = "SELECT * FROM work_leaves WHERE id="+id;
+            statement = conn.createStatement();
+
+
+            // wykonanie zapytania SQL
+            resultSet = statement.executeQuery(sql);
+
+            // przetworzenie wyniku zapytania
+            while (resultSet.next()) {
+
+                // pobranie danych z rzedu
+                int ids = resultSet.getInt("id");
+                String startDate= resultSet.getString("start_date");
+                String end_date= resultSet.getString("end_date");
+
+                int days = resultSet.getInt("days");
+                String type = resultSet.getString("leave_type");
+                String status = resultSet.getString("leave_status");
+                int emplId = resultSet.getInt("employee_id");
+                // dodanie do listy nowego obiektu
+                workLeave=new WorkLeave(ids,startDate, end_date, days, type, status,emplId );
+
+            }
+
+        } finally {
+
+            // zamkniecie obiektow JDBC
+            close(conn, statement, resultSet);
+        }
+
+        return workLeave;
+
+    }
 
 
     public void setName(String name) {
