@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -196,12 +197,15 @@ public class LoginServlet extends HttpServlet {
         String startDate = request.getParameter("start");
         LocalDate date = LocalDate.parse(startDate);
         LocalDate endDate = date.plusDays(Integer.parseInt(request.getParameter("time")));
-        String endDAYS = endDate.toString();
+
         int days = Integer.parseInt(request.getParameter("time"));
         String leaveType = request.getParameter("metric");
         int daysAv = dbUtil.getEmployeeData(name).getAvailableDays();
 
-        WorkLeave workLeave = new WorkLeave(id, startDate, endDAYS, days, leaveType, "do modyfikacji", idEmpl);
+        int daysMinusWeekends = checkWeekend(date, days);
+        String endDate1 = String.valueOf(date.plusDays(daysMinusWeekends));
+
+        WorkLeave workLeave = new WorkLeave(id, startDate, endDate1, days, leaveType, "do modyfikacji", idEmpl);
 
 
         if (date.isBefore(LocalDate.now())) {
@@ -278,9 +282,12 @@ public class LoginServlet extends HttpServlet {
 
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate ld = LocalDate.parse(startDate, f);
-        String endDate = String.valueOf(ld.plusDays(days));
 
-        WorkLeave workLeave = new WorkLeave(startDate, endDate, days, leaveType, "czeka na akceptację", employeeId);
+        int daysMinusWeekends = checkWeekend(ld, days);
+        String endDate = String.valueOf(ld.plusDays(daysMinusWeekends));
+
+
+        WorkLeave workLeave = new WorkLeave(startDate, endDate, daysMinusWeekends, leaveType, "czeka na akceptację", employeeId);
 
         if (ld.isBefore(LocalDate.now())) {
             if (days < daysAv) {
@@ -353,6 +360,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Creates data to manager tables
+     *
      * @param request
      * @param response
      * @throws Exception
@@ -375,6 +383,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Checks if user exists
+     *
      * @param name
      * @param pass
      * @return
@@ -400,6 +409,26 @@ public class LoginServlet extends HttpServlet {
         return status;
     }
 
+    /**
+     * Checks how many weekend days happen during leave
+     * @param start
+     * @param days
+     * @return
+     */
+    private int checkWeekend(LocalDate start, int days) {
+        int avaiDays = days;
 
+
+        for (int i = 0; i <= days; i++) {
+            if (start.plusDays(i).getDayOfWeek().equals(DayOfWeek.SATURDAY) || start.plusDays(i).getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                avaiDays++;
+            }
+        }
+
+        return avaiDays;
+    }
 }
+
+
+
 
