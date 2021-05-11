@@ -26,6 +26,7 @@ public class AdminServlet extends HttpServlet{
     private DBUtilAdmin dbUtil;
     private final String db_url = "jdbc:mysql://localhost:3306/companyDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
     private String msg;
+
     /**
      * Initiate connection to database, calls DBUtilAdminclass
      * @param config
@@ -45,7 +46,7 @@ public class AdminServlet extends HttpServlet{
     }
 
     /**
-     * Opens correct jsp files and fills table with correct data
+     * Opens correct jsp files and fills tables with correct data
      * @param request
      * @param response
      * @throws ServletException
@@ -106,7 +107,6 @@ public class AdminServlet extends HttpServlet{
 
         try {
 
-            // odczytanie zadania
             String command = request.getParameter("command");
 
             if (command == null)
@@ -120,11 +120,8 @@ public class AdminServlet extends HttpServlet{
                 case "CANCEL":
                     updateLeaveCancel(request, response);
                     break;
-                case "CANCEL2":
-                    updateLeaveCancel2(request, response);
-                    break;
                 case "UPDATE":
-                    updatePhone(request, response);
+                    updateLeave(request, response);
                     break;
                 case "DELETE":
                     deleteLeave(request, response);
@@ -141,12 +138,12 @@ public class AdminServlet extends HttpServlet{
     }
 
     /**
-     *
+     *Updates leave
      * @param request
      * @param response
      * @throws Exception
      */
-    private void updatePhone(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void updateLeave(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         int id = Integer.parseInt(request.getParameter("id"));
 
@@ -158,7 +155,7 @@ public class AdminServlet extends HttpServlet{
     }
 
     /**
-     *
+     * Changes status of entry to 'odrzucono modyfikacje'
      * @param request
      * @param response
      * @throws Exception
@@ -166,28 +163,13 @@ public class AdminServlet extends HttpServlet{
     private void updateLeaveCancel(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         int id = Integer.parseInt(request.getParameter("id"));
-
-        dbUtil.updateLeaveCancel(id);
-
-        listLeaves(request, response);
-
-    }
-
-    /**
-     * Changes status of entry to 'odrzucono modyfikacje'
-     * @param request
-     * @param response
-     * @throws Exception
-     */
-    private void updateLeaveCancel2(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        int id = Integer.parseInt(request.getParameter("id"));
         dbUtil.updateLeaveCancel(id);
         listLeaves(request, response);
 
     }
 
     /**
-     * Changes status of entry to 'odrzucono modyfikacje'
+     * Deletes leave
      * @param request
      * @param response
      * @throws Exception
@@ -200,7 +182,7 @@ public class AdminServlet extends HttpServlet{
     }
 
     /**
-     * Creates data to admin tables
+     * Creates data for admin's tables on website
      * @param request
      * @param response
      * @throws Exception
@@ -221,8 +203,8 @@ public class AdminServlet extends HttpServlet{
 
     /**
      * Checks if correct login data were given
-     * @param name
-     * @param pass
+     * @param name user's login
+     * @param pass user's password
      * @return
      */
     private boolean validate(String name, String pass) {

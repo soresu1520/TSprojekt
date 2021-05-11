@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Extends DBUtil class
- * Contains method used to control Login Servlet
+ * Contains methods used to control Login Servlet
  */
 public class DBUtilEmployee extends DBUtil{
 
@@ -30,7 +30,7 @@ public class DBUtilEmployee extends DBUtil{
 
     /**
      * Creates list of WorkLeaves belonging to certain user
-     * @param id
+     * @param id employee's id
      * @return List of workLeaves
      * @throws Exception
      */
@@ -77,9 +77,9 @@ public class DBUtilEmployee extends DBUtil{
 
 
     /**
-     * Connects to database to create list of objects, that fulfill set conditions
-     * @param depId
-     * @param status
+     * Connects to database to create list of entries from manager_view, that fulfill set conditions
+     * @param depId department's id
+     * @param status leave's status
      * @return List of ManagerView objects
      * @throws Exception
      */
@@ -135,9 +135,9 @@ public class DBUtilEmployee extends DBUtil{
 
 
     /**
-     * Creates Manager class object containing information on chosen user, based on data from database e
-     * @param login
-     * @return Manager manager
+     * Creates Manager class object containing information on chosen user (manager from managers table), based on data from database
+     * @param login user's login
+     * @return Manager
      * @throws Exception
      */
     public Manager getManagerData(String login)  throws Exception{
@@ -182,9 +182,9 @@ public class DBUtilEmployee extends DBUtil{
 
 
     /**
-     * Creates Employee class object containing information on chosen user, based on data from database
-     * @param login
-     * @return
+     * Creates Employee class object containing information on chosen user (employee from employees table), based on data from database
+     * @param login user's login
+     * @return Employee
      * @throws Exception
      */
     public Employee getEmployeeData(String login)  throws Exception{
@@ -232,7 +232,7 @@ public class DBUtilEmployee extends DBUtil{
     /**
      * Updates leave_status in work_leaves table in database.
      * Changes it to 'do usunięcia'
-     * @param id
+     * @param id leave's id
      * @throws Exception
      */
     public void updateLeave(int id) throws Exception {
@@ -262,8 +262,8 @@ public class DBUtilEmployee extends DBUtil{
 
     /**
      * Modifies entry with given in work_leave table
-     * @param id
-     * @param workLeave
+     * @param id leave's id
+     * @param workLeave leave meant to be modified
      * @throws Exception
      */
     public void updateLeaveModify(int id,WorkLeave workLeave) throws Exception {
@@ -297,10 +297,9 @@ public class DBUtilEmployee extends DBUtil{
 
     /**
      * Updates leave_status in work_leave table to 'zaakceptowano'
-     * @param id
+     * @param id leave's id
      * @throws Exception
      */
-
     public void updateLeaveAccept(int id) throws Exception {
 
         Connection conn = null;
@@ -328,7 +327,7 @@ public class DBUtilEmployee extends DBUtil{
 
     /**
      * Deletes entry from work_leaves table were certain id is present
-     * @param id
+     * @param id leave's id
      * @throws Exception
      */
     public void updateLeaveCancel(int id) throws Exception {
@@ -358,7 +357,7 @@ public class DBUtilEmployee extends DBUtil{
 
     /**
      * Creates new entry into work_leaves table
-     * @param workLeave
+     * @param workLeave leave meant to be added to the work_leaves table
      * @throws Exception
      */
     public void addLeave(WorkLeave workLeave) throws Exception {
@@ -392,8 +391,8 @@ public class DBUtilEmployee extends DBUtil{
     }
 
     /**
-     * Check whether manager or employee are login into site
-     * @return
+     * Check whether manager or employee is logging into site
+     * @return number which says if it's manager (1) or employee (2)
      * @throws Exception
      */
     public int checkWho() throws Exception {
@@ -434,8 +433,8 @@ public class DBUtilEmployee extends DBUtil{
 
     /**
      * Create list of entries from leaves_archive table
-     * @param id
-     * @return
+     * @param id employee's id
+     * @return list of LeavesArchive objects (deleted leaves)
      * @throws Exception
      */
     public List<LeavesArchive> getOldLeaves(int id) throws Exception{
@@ -477,7 +476,7 @@ public class DBUtilEmployee extends DBUtil{
 
     /**
      * Creates WorkLeave class object containing information on chosen user, based on data from database
-     * @param id
+     * @param id leave's id
      * @return Chosen work leave
      * @throws Exception
      */
@@ -516,8 +515,6 @@ public class DBUtilEmployee extends DBUtil{
         }
         return workLeave;
     }
-
-
 
     public void setName(String name) {
         this.name = name;

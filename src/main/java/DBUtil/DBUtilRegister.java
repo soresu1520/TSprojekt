@@ -10,7 +10,7 @@ import java.sql.Statement;
 
 /**
  * Extends DBUtil class
- * Contains method used to control MakeAccountServlet class
+ * Contains methods used to control MakeAccountServlet class
  */
 public class DBUtilRegister extends DBUtil {
 
@@ -21,7 +21,7 @@ public class DBUtilRegister extends DBUtil {
     }
 
     /**
-     * Creates new entry in employees table in company DB
+     * Creates new entry in employees table in company DB and creates new user with privileges
      * @param employee
      * @throws Exception
      */
@@ -55,8 +55,14 @@ public class DBUtilRegister extends DBUtil {
             statement2.execute(command);
 
             Statement statement3 = conn.createStatement();
-            String query = "GRANT ALL PRIVILEGES ON *.* TO '" + employee.getLogin() + "'@'localhost'";
-            statement3.execute(query);
+            String query1 = "grant select, insert, update, trigger on companyDB.work_leaves to '" + employee.getLogin() + "'@'localhost'";
+            String query2 = "grant select on companyDB.managers to '" + employee.getLogin() + "'@'localhost'";
+            String query3 = "grant select on companyDB.employees to '" + employee.getLogin() + "'@'localhost'";
+            String query4 = "grant select on companyDB.leaves_archive to '" + employee.getLogin() + "'@'localhost'";
+            statement3.execute(query1);
+            statement3.execute(query2);
+            statement3.execute(query3);
+            statement3.execute(query4);
 
 
         } finally {

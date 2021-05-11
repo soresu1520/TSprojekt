@@ -196,7 +196,6 @@ public class LoginServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         String startDate = request.getParameter("start");
         LocalDate date = LocalDate.parse(startDate);
-        LocalDate endDate = date.plusDays(Integer.parseInt(request.getParameter("time")));
 
         int days = Integer.parseInt(request.getParameter("time"));
         String leaveType = request.getParameter("metric");
@@ -204,10 +203,8 @@ public class LoginServlet extends HttpServlet {
 
         int daysMinusWeekends = checkWeekend(date, days);
         String endDate1 = String.valueOf(date.plusDays(daysMinusWeekends));
-        boolean isCorrect = checkDate(date, daysMinusWeekends);
         WorkLeave workLeave = new WorkLeave(id, startDate, endDate1, days, leaveType, "do modyfikacji", idEmpl);
 
-        if (isCorrect) {
             if (date.isAfter(LocalDate.now())) {
                 if (days < daysAv) {
                     dbUtil.updateLeaveModify(id, workLeave);
@@ -224,12 +221,7 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("msg", msg);
                 dispatcher.forward(request, response);
             }
-        } else {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/modify.jsp");
-            msg = "Już masz urlop w tym terminie :(";
-            request.setAttribute("msg", msg);
-            dispatcher.forward(request, response);
-        }
+
 
     }
 
@@ -459,16 +451,13 @@ public class LoginServlet extends HttpServlet {
         List<WorkLeave> workLeaves = dbUtil.getWorkLeaves(id);
 
         for (int i = 0; i < workLeaves.size(); i++) {
-
             for (int j = 0; j <= days; j++) {
-
                 if (start.plusDays(j).isAfter(LocalDate.parse(workLeaves.get(i).getStartDate())) && start.plusDays(j).isBefore(LocalDate.parse(workLeaves.get(i).getEndDate())))
                     isCorrect = false;
 
             }
 
         }
-
 
         return isCorrect;
     }

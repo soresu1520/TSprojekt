@@ -109,7 +109,7 @@
 
             <%-- definiowanie linkow--%>
             <c:url var="updateLink" value="AdminServlet">
-                <c:param name="command" value="CANCEL2"></c:param>
+                <c:param name="command" value="CANCEL"></c:param>
                 <c:param name="id" value="${tmpWorkLeave.id}"></c:param>
             </c:url>
 

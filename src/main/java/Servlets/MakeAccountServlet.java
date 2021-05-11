@@ -50,7 +50,6 @@ public class MakeAccountServlet extends HttpServlet {
      * Calls DBUtilRegister class
      * @throws ServletException
      */
-
     @Override
     public void init() throws ServletException {
         super.init();
@@ -65,7 +64,7 @@ public class MakeAccountServlet extends HttpServlet {
     }
 
     /**
-     * Checks checks the correctness of the data, and opens correct jsp file
+     * Checks the correctness of the data and opens correct jsp file
      * @param request
      * @param response
      * @throws ServletException
@@ -73,11 +72,6 @@ public class MakeAccountServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-
-
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
 
             addEmployee(request, response);
@@ -89,11 +83,16 @@ public class MakeAccountServlet extends HttpServlet {
             request.setAttribute("message", msg);
             dispatcher.forward(request, response);
         }
+
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 
 
     /**
-     * Takes dat from registration form and creates new entry into employees table
+     * Takes data from registration form and creates new entry into employees table
      * @param request
      * @param response
      * @throws Exception

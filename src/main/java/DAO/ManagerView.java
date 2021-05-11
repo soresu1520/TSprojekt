@@ -1,7 +1,7 @@
 package DAO;
 
 /**
- * Maps manager view from companyDB
+ * Maps manager_view view from companyDB
  */
 public class ManagerView {
 

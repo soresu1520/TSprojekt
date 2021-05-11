@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 /**
- * Contains utilities, that help connecting to db
+ * Contains utilities that help to connect to db
  */
 public abstract class DBUtil {
 

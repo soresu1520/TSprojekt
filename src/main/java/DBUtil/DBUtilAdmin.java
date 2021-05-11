@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  * Extends DBUtil class
- * Contains method used to control Admin class
+ * Contains methods used to control Admin class
  */
 public class DBUtilAdmin extends DBUtil {
 
@@ -25,8 +25,8 @@ public class DBUtilAdmin extends DBUtil {
 
 
     /**
-     * Creates list of WorkLeaves meant to delete
-     * @return List of workLeaves
+     * Creates list of WorkLeaves meant to be deleted
+     * @return List of WorkLeave objects (leaves meant to be deleted)
      * @throws Exception
      */
     public List<WorkLeave> getWorkLeavesToDelete() throws Exception {
@@ -71,8 +71,8 @@ public class DBUtilAdmin extends DBUtil {
 
     }
     /**
-     * Creates list of WorkLeaves meant to modify
-     * @return List of workLeaves
+     * Creates list of WorkLeaves meant to be modified
+     * @return List of WorkLeave objects (leaves meant to be modified)
      * @throws Exception
      */
     public List<WorkLeave> getWorkLeavesToModify() throws Exception {
@@ -115,8 +115,8 @@ public class DBUtilAdmin extends DBUtil {
     }
 
     /**
-     * Deletes entry from work_leaves table were certain id is present
-     * @param id
+     * Deletes entry from work_leaves table where certain id is present
+     * @param id id of leave
      * @throws Exception
      */
     public void deleteLeave(String id) throws Exception {
@@ -147,7 +147,7 @@ public class DBUtilAdmin extends DBUtil {
 
     /**
      * Changes leave_status of chosen entry to 'zaakceptowany'
-     * @param id
+     * @param id id of leave
      * @throws Exception
      */
     public void updateLeave(int id) throws Exception {
@@ -176,7 +176,7 @@ public class DBUtilAdmin extends DBUtil {
     }
     /**
      * Changes leave_status of chosen entry to 'odrzucono modyfikacje'
-     * @param id
+     * @param id id of leave
      * @throws Exception
      */
     public void updateLeaveCancel(int id) throws Exception {
