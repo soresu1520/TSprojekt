@@ -35,9 +35,7 @@
 <div style="margin: 20px">
     <h2 style="margin: 20px">Formularz zgłoszeniowy</h2>
     <form action="LoginServlet" method="get">
-        <c:if test="${not empty msg}">
-            <p class="text-center">${msg}</p>
-        </c:if>
+
         <input type="hidden" name="command" value="ADD">
 
         <div>
@@ -64,6 +62,9 @@
             </select>
         </div>
 
+        <c:if test="${not empty msg}">
+            <p class="text-center" style="font-family: Arial">${msg}</p>
+        </c:if>
 
         <button type="submit" class="btn btn-primary">Potwierdź</button>
 

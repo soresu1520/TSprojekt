@@ -208,18 +208,18 @@ public class LoginServlet extends HttpServlet {
         WorkLeave workLeave = new WorkLeave(id, startDate, endDate1, days, leaveType, "do modyfikacji", idEmpl);
 
 
-        if (date.isBefore(LocalDate.now())) {
+        if (date.isAfter(LocalDate.now())) {
             if (days < daysAv) {
                 dbUtil.updateLeaveModify(id, workLeave);
                 listEmployeeView(request, response);
             } else {
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/takeVacation.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/modify.jsp");
                 msg = "Masz za mało wolnego :(";
                 request.setAttribute("msg", msg);
                 dispatcher.forward(request, response);
             }
         } else {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/takeVacation.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/modify.jsp");
             msg = "Nie możesz wziać urlopu w przeszłości :(";
             request.setAttribute("msg", msg);
             dispatcher.forward(request, response);
@@ -287,9 +287,9 @@ public class LoginServlet extends HttpServlet {
         String endDate = String.valueOf(ld.plusDays(daysMinusWeekends));
 
 
-        WorkLeave workLeave = new WorkLeave(startDate, endDate, daysMinusWeekends, leaveType, "czeka na akceptację", employeeId);
+        WorkLeave workLeave = new WorkLeave(startDate, endDate, days, leaveType, "czeka na akceptację", employeeId);
 
-        if (ld.isBefore(LocalDate.now())) {
+        if (ld.isAfter(LocalDate.now())) {
             if (days < daysAv) {
                 dbUtil.addLeave(workLeave);
                 listEmployeeView(request, response);

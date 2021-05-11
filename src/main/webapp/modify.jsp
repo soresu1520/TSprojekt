@@ -44,9 +44,7 @@
         <h2>Zmień dane</h2>
         <input type="hidden" name="command" value="UPDATE"/>
         <input type="hidden" name="id" value="${WORKLEAVE.id}"/>
-        <c:if test="${not empty msg}">
-            <p class="text-center">${msg}</p>
-        </c:if>
+
 
         <div>
             <label for="start">Data początkowa</label>
@@ -72,7 +70,9 @@
             </select>
         </div>
 
-
+        <c:if test="${not empty msg}">
+            <p class="text-center" style="font-family: Arial">${msg}</p>
+        </c:if>
 
 
         <button type="submit" class="btn btn-primary" style="margin: 10px">Zmień</button>

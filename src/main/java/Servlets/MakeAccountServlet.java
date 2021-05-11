@@ -73,6 +73,11 @@ public class MakeAccountServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+
+
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
 
             addEmployee(request, response);
@@ -84,11 +89,6 @@ public class MakeAccountServlet extends HttpServlet {
             request.setAttribute("message", msg);
             dispatcher.forward(request, response);
         }
-
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 
 
