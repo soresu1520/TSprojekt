@@ -1,5 +1,7 @@
 package DAO;
-
+/**
+ * Maps work_leaves table from companyDB
+ */
 public class WorkLeave {
 
     private int id;

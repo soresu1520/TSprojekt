@@ -16,6 +16,9 @@ import java.sql.DriverManager;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Controls profile of admin
+ */
 
 @WebServlet("/AdminServlet")
 public class AdminServlet extends HttpServlet{
@@ -23,7 +26,11 @@ public class AdminServlet extends HttpServlet{
     private DBUtilAdmin dbUtil;
     private final String db_url = "jdbc:mysql://localhost:3306/companyDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
     private String msg;
-
+    /**
+     * Initiate connection to database, calls DBUtilAdminclass
+     * @param config
+     * @throws ServletException
+     */
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -37,6 +44,13 @@ public class AdminServlet extends HttpServlet{
         }
     }
 
+    /**
+     * Opens correct jsp files and fills table with correct data
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
@@ -73,15 +87,19 @@ public class AdminServlet extends HttpServlet{
                 msg="Niepoprawne dane logowania :(";
                 request.setAttribute("message", msg);
                 dispatcher.forward(request, response);
-                //RequestDispatcher dispatcher = request.getRequestDispatcher("/index.html");
-                //dispatcher.include(request, response);
             }
 
 
 
     }
 
-
+    /**
+     * Checks what command was used on site and calls correct method
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
@@ -99,19 +117,15 @@ public class AdminServlet extends HttpServlet{
                 case "LIST":
                     listLeaves(request, response);
                     break;
-
-
                 case "CANCEL":
                     updateLeaveCancel(request, response);
                     break;
-
                 case "CANCEL2":
                     updateLeaveCancel2(request, response);
                     break;
                 case "UPDATE":
                     updatePhone(request, response);
                     break;
-
                 case "DELETE":
                     deleteLeave(request, response);
                     break;
@@ -126,20 +140,13 @@ public class AdminServlet extends HttpServlet{
 
     }
 
-
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void updatePhone(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        /* LocalDate date = LocalDate.parse(request.getParameter("start"));
-        LocalDate end = date.plusDays(Integer.parseInt(request.getParameter("time")));
-
-        int id = Integer.parseInt(request.getParameter("id"));
-        String startDate = request.getParameter("start");
-        String endDate = end.toString();
-        int days = Integer.parseInt(request.getParameter("time"));
-        String leaveType = request.getParameter("metric");
-        String leaveStatus = "zaakceptowany";
-        int employeeID = 1;  */
-
 
         int id = Integer.parseInt(request.getParameter("id"));
 
@@ -150,6 +157,12 @@ public class AdminServlet extends HttpServlet{
 
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void updateLeaveCancel(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         int id = Integer.parseInt(request.getParameter("id"));
@@ -160,50 +173,58 @@ public class AdminServlet extends HttpServlet{
 
     }
 
+    /**
+     * Changes status of entry to 'odrzucono modyfikacje'
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void updateLeaveCancel2(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-
         int id = Integer.parseInt(request.getParameter("id"));
-
         dbUtil.updateLeaveCancel(id);
-
         listLeaves(request, response);
-
 
     }
 
-
+    /**
+     * Changes status of entry to 'odrzucono modyfikacje'
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void deleteLeave(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        // odczytanie danych z formularza
         String id = request.getParameter("id");
-
-        // usuniecie telefonu z BD
         dbUtil.deleteLeave(id);
-
-
         listLeaves(request, response);
-
 
     }
 
+    /**
+     * Creates data to admin tables
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void listLeaves(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         List<WorkLeave> workLeaves = dbUtil.getWorkLeavesToDelete();
         List<WorkLeave> workLeaves2 = dbUtil.getWorkLeavesToModify();
-        // dodanie listy do obiektu zadania
+
         request.setAttribute("TO_DELETE", workLeaves);
         request.setAttribute("TO_MODIFY", workLeaves2);
-        // dodanie request dispatcher
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/administratoView.jsp");
 
-        // przekazanie do JSP
         dispatcher.forward(request, response);
 
     }
 
-
-
+    /**
+     * Checks if correct login data were given
+     * @param name
+     * @param pass
+     * @return
+     */
     private boolean validate(String name, String pass) {
         boolean status = false;
 

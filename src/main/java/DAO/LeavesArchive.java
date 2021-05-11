@@ -1,6 +1,8 @@
 package DAO;
 
-import java.time.LocalDate;
+/**
+ * Maps leaves_archive table from companyDB
+ */
 
 public class LeavesArchive {
 

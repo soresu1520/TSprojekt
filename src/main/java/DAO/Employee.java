@@ -1,5 +1,8 @@
 package DAO;
 
+/**
+ * Maps employees table from companyDB
+ */
 public class Employee {
 
     private int id;

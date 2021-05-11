@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
+/**
+ * Controls registration process
+ */
+
 @WebServlet("/MakeAccountServlet")
 public class MakeAccountServlet extends HttpServlet {
 
@@ -24,6 +28,9 @@ public class MakeAccountServlet extends HttpServlet {
     private DBUtilRegister dbUtil;
     private String msg;
 
+    /**
+     * Initiates connection with datasource
+     */
     public MakeAccountServlet() {
 
         Context initCtx = null;
@@ -39,6 +46,11 @@ public class MakeAccountServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Calls DBUtilRegister class
+     * @throws ServletException
+     */
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -52,6 +64,13 @@ public class MakeAccountServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Checks checks the correctness of the data, and opens correct jsp file
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
@@ -72,6 +91,13 @@ public class MakeAccountServlet extends HttpServlet {
 
     }
 
+
+    /**
+     * Takes dat from registration form and creates new entry into employees table
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void addEmployee(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         int leaveDays;
@@ -140,7 +166,7 @@ public class MakeAccountServlet extends HttpServlet {
 
         dbUtil.addEmployee(employee);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.html");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/registrationSuccess.jsp");
         dispatcher.include(request, response);
 
     }

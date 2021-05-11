@@ -1,5 +1,7 @@
 package DAO;
-
+/**
+ * Maps managers table from companyDB
+ */
 public class Manager {
 
     private int id;

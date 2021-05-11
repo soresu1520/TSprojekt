@@ -8,6 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 
+/**
+ * Extends DBUtil class
+ * Contains method used to control MakeAccountServlet class
+ */
 public class DBUtilRegister extends DBUtil {
 
     private DataSource dataSource;
@@ -16,6 +20,11 @@ public class DBUtilRegister extends DBUtil {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Creates new entry in employees table in company DB
+     * @param employee
+     * @throws Exception
+     */
     public void addEmployee(Employee employee) throws Exception {
 
         Connection conn = null;

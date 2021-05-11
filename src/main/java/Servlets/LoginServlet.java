@@ -22,6 +22,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controls profiles of manager and employee
+ */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
@@ -32,6 +35,11 @@ public class LoginServlet extends HttpServlet {
     private String msg;
 
 
+    /**
+     * Initiate connection to database, calls DBUtilEmployee class
+     * @param config
+     * @throws ServletException
+     */
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -45,6 +53,14 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+
+    /**
+     * Opens correct jsp files and fills table with data, that belongs to user
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
@@ -67,7 +83,7 @@ public class LoginServlet extends HttpServlet {
             List<ManagerView> workLeavesToAccept = null;
             List<ManagerView> workLeavesAccepted = null;
 
-            Employee employee1 = null;
+
             try {
                 who = dbUtil.checkWho();
             } catch (Exception e) {
@@ -108,12 +124,18 @@ public class LoginServlet extends HttpServlet {
             msg="Niepoprawne dane logowania :(";
             request.setAttribute("message", msg);
             dispatcher.forward(request, response);
-            //dispatcher.include(request, response);
         }
 
 
     }
 
+    /**
+     * Checks what command was used on site and calls correct method
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
@@ -127,15 +149,12 @@ public class LoginServlet extends HttpServlet {
                 case "LIST":
                     listEmployeeView(request, response);
                     break;
-
                 case "ADD":
                     addLeave(request, response);
                     break;
-
                 case "DELETE_EMPLOYEE":
                     deleteEmployeeLeave(request, response);
                     break;
-
                 case "UPDATE_EMPLOYEE":
                     loadLeave(request,response);
                     break;
@@ -158,13 +177,17 @@ public class LoginServlet extends HttpServlet {
 
     }
 
-
+    /**
+     * Modifies data of chosen work_leave entry
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void updateLeave(HttpServletRequest request, HttpServletResponse response) throws
             Exception  {
 
         String name = dbUtil.getName();
         int idEmpl = dbUtil.getEmployeeData(name).getId();
-
         int id = Integer.parseInt(request.getParameter("id"));
         String startDate = request.getParameter("start");
         LocalDate date = LocalDate.parse(startDate);
@@ -180,7 +203,13 @@ public class LoginServlet extends HttpServlet {
     }
 
 
-    //zmienia status na "do usunięcia", pracownik zgłasza chęć usunięcia urlopu
+
+    /**
+     * Changes leave_status from work_leave table to 'do usuniecia'
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void deleteEmployeeLeave(HttpServletRequest request, HttpServletResponse response) throws
             Exception  {
 
@@ -191,33 +220,36 @@ public class LoginServlet extends HttpServlet {
     }
 
 
-
+    /**
+     * Sends data of chosen entry into modify.jsp
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void loadLeave(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        //odczytanie id telefonu z formularza
         String id = request.getParameter("leaveID");
 
         WorkLeave workLeave = dbUtil.getWorkLeave(Integer.parseInt(id));
         request.setAttribute("WORKLEAVE",workLeave);
 
-
-        //przekazanie telefonu do obiektu request
-        //request.setAttribute("PHONE", phone);
-
-        //wysłanie danych do formmularza JSP (update_phone_form)
         RequestDispatcher dispatcher = request.getRequestDispatcher("/modify.jsp");
         dispatcher.forward(request, response);
 
     }
 
+    /**
+     * Creates new work_leave entry
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void addLeave(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String startDate = request.getParameter("start");
         int days = Integer.parseInt(request.getParameter("time"));
         String leaveType = request.getParameter("metric");
-
         String name = dbUtil.getName();
-
         int employeeId = dbUtil.getEmployeeData(name).getId();
         int daysAv = dbUtil.getEmployeeData(name).getAvailableDays();
 
@@ -240,23 +272,36 @@ public class LoginServlet extends HttpServlet {
 
     }
 
+    /**
+     * Deletes chosen entry
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void updateCancel(HttpServletRequest request, HttpServletResponse response) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));
         dbUtil.updateLeaveCancel(id);
-
         listManagerView(request, response);
     }
 
-
+    /**
+     * Changes leave_status from work_leaves table into 'zaakceptowany'
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void updateAccept(HttpServletRequest request, HttpServletResponse response) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));
-
         dbUtil.updateLeaveAccept(id);
-
         listManagerView(request, response);
     }
 
-
+    /**
+     * Creates data to employees tables
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void listEmployeeView(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String name = dbUtil.getName();
         int id = dbUtil.getEmployeeData(name).getId();
@@ -265,13 +310,20 @@ public class LoginServlet extends HttpServlet {
         List<Employee> employees = new ArrayList();
         Employee employee = dbUtil.getEmployeeData(name);
         employees.add(employee);
+
         request.setAttribute("WORK_LEAVE",workLeaves);
         request.setAttribute("LEAVE_ARCHIVE",leavesArchive);
         request.setAttribute("USER",employees);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/employeeView.jsp");
         dispatcher.forward(request,response);
     }
-
+    /**
+     * Creates data to manager tables
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void listManagerView(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String name = dbUtil.getName();
@@ -279,41 +331,39 @@ public class LoginServlet extends HttpServlet {
         List<ManagerView> managerViews = dbUtil.getManagerView(id,"czeka na akceptację");
         List<ManagerView> managerViews2 = dbUtil.getManagerView(id,"zaakceptowany");
 
-
         request.setAttribute("WORK_LEAVES",managerViews);
         request.setAttribute("REST",managerViews2);
 
-        //dodanie request dispatcher
         RequestDispatcher dispatcher = request.getRequestDispatcher("/bossView.jsp");
 
-        //przekazanie do JSP
         dispatcher.forward(request, response);
 
     }
 
+    /**
+     * Checks if user exists
+     * @param name
+     * @param pass
+     * @return
+     */
     private boolean validate(String name, String pass) {
         boolean status = false;
 
         try {
-
             Class.forName("com.mysql.cj.jdbc.Driver");
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-
         }
-
         Connection conn = null;
 
         try {
-
             conn = DriverManager.getConnection(db_url, name, pass);
             status = true;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return status;
     }
 

@@ -1,7 +1,8 @@
 package DAO;
 
-import java.time.LocalDate;
-
+/**
+ * Maps manager view from companyDB
+ */
 public class ManagerView {
 
     private int employeeId;
