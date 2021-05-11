@@ -37,6 +37,7 @@
 
 <div style="margin: 20px">
     <table class="table table-hover" >
+
         <thead>
         <tr  class="table-primary">
             <th class="col">Imię i nazwisko</th>
@@ -72,7 +73,7 @@
     </table>
 </div>
 
-<h2 style="margin: 20px">Zatwierdzone urlopu</h2>
+<h2 style="margin: 20px">Zatwierdzone urlopy</h2>
 
 <div style="margin: 20px">
     <table class="table table-hover" >

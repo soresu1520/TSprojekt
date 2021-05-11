@@ -22,6 +22,7 @@ public class AdminServlet extends HttpServlet{
 
     private DBUtilAdmin dbUtil;
     private final String db_url = "jdbc:mysql://localhost:3306/companyDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
+    private String msg;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -47,32 +48,35 @@ public class AdminServlet extends HttpServlet{
         dbUtil.setName(name);
         dbUtil.setPassword(password);
 
-        if (validate(name, password)) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/administratoView.jsp");
+            if (validate(name, password) == true && name.equals("root")) {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/administratoView.jsp");
 
-            List<WorkLeave> workLeavesToModify = null;
-            List<WorkLeave> workLeavesToDelete = null;
+                List<WorkLeave> workLeavesToModify = null;
+                List<WorkLeave> workLeavesToDelete = null;
 
-            try {
+                try {
 
-               workLeavesToDelete = dbUtil.getWorkLeavesToDelete();
-               workLeavesToModify = dbUtil.getWorkLeavesToModify();
+                    workLeavesToDelete = dbUtil.getWorkLeavesToDelete();
+                    workLeavesToModify = dbUtil.getWorkLeavesToModify();
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                request.setAttribute("TO_MODIFY", workLeavesToModify);
+                request.setAttribute("TO_DELETE", workLeavesToDelete);
+
+
+                dispatcher.forward(request, response);
+            } else {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/messages.jsp");
+                msg="Niepoprawne dane logowania :(";
+                request.setAttribute("message", msg);
+                dispatcher.forward(request, response);
+                //RequestDispatcher dispatcher = request.getRequestDispatcher("/index.html");
+                //dispatcher.include(request, response);
             }
 
-            // dodanie listy do obiektu zadania
-            request.setAttribute("TO_MODIFY", workLeavesToModify);
-            request.setAttribute("TO_DELETE", workLeavesToDelete);
-
-
-            dispatcher.forward(request, response);
-        } else {
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.html");
-            dispatcher.include(request, response);
-        }
 
 
     }

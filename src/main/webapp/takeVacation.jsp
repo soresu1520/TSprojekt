@@ -32,9 +32,13 @@
     </div>
 </nav>
 
-<div>
-    <h2>Formularz zgłoszeniowy</h2>
-    <form action="VacationServlet" method="post">
+<div style="margin: 20px">
+    <h2 style="margin: 20px">Formularz zgłoszeniowy</h2>
+    <form action="LoginServlet" method="get">
+        <c:if test="${not empty msg}">
+            <p class="text-center">${msg}</p>
+        </c:if>
+        <input type="hidden" name="command" value="ADD">
 
         <div>
             <label for="start">Data początkowa</label>

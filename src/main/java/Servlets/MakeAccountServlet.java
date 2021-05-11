@@ -22,6 +22,7 @@ public class MakeAccountServlet extends HttpServlet {
 
     private DataSource dataSource;
     private DBUtilRegister dbUtil;
+    private String msg;
 
     public MakeAccountServlet() {
 
@@ -31,7 +32,7 @@ public class MakeAccountServlet extends HttpServlet {
             Context envCtx = (Context) initCtx.lookup("java:comp/env");
             // Look up our data source
             dataSource = (DataSource)
-                    envCtx.lookup("jdbc/companyDB"); //z context.xml
+                    envCtx.lookup("jdbc/companydb"); //z context.xml
 
         } catch (NamingException e) {
             e.printStackTrace();
@@ -53,23 +54,29 @@ public class MakeAccountServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         try {
 
             addEmployee(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/messages.jsp");
+            msg="Niepoprawne dane rejestracji :(";
+            request.setAttribute("message", msg);
+            dispatcher.forward(request, response);
         }
+
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 
     private void addEmployee(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         int leaveDays;
         int years;
+        int idDep;
 
         String login = request.getParameter("login");
         String password = request.getParameter("password");
@@ -79,6 +86,24 @@ public class MakeAccountServlet extends HttpServlet {
         String position = request.getParameter("job");
         int yearsJob = Integer.parseInt(request.getParameter("years"));
         String school = request.getParameter("customRadio");
+        String dep = request.getParameter("metric");
+
+        switch(dep){
+            case "Dział 1":
+                idDep=1;
+                break;
+
+            case "Dział 2":
+                idDep=2;
+                break;
+
+            case "Dział 3":
+                idDep=3;
+                break;
+
+            default:
+                idDep=1;
+        }
 
         switch (school) {
             case "Zasadnicza szkoła zawodowa":
@@ -110,13 +135,13 @@ public class MakeAccountServlet extends HttpServlet {
         else
             leaveDays=20;
 
-        Employee employee = new Employee(login, password, firstName, lastName, email, 1,
+        Employee employee = new Employee(login, password, firstName, lastName, email, idDep,
                 position, leaveDays, leaveDays);
 
         dbUtil.addEmployee(employee);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/index.html");
-        dispatcher.include(request, response); //!!!
+        dispatcher.include(request, response);
 
     }
 

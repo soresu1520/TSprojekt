@@ -118,7 +118,6 @@ public class DBUtilAdmin extends DBUtil {
 
         return workLeaves;
 
-
     }
     public void deleteLeave(String id) throws Exception {
 

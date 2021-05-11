@@ -26,7 +26,7 @@ public class DBUtilRegister extends DBUtil {
             conn = dataSource.getConnection();
 
             String sql = "INSERT INTO employees(login, pass, first_name, last_name, email, dep_id, eposition, leave_days, avaiable_days) "
-            + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             statement = conn.prepareStatement(sql);
             statement.setString(1, employee.getLogin());
@@ -46,7 +46,7 @@ public class DBUtilRegister extends DBUtil {
             statement2.execute(command);
 
             Statement statement3 = conn.createStatement();
-            String query = "GRANT ALL PRIVILEGES ON companydb TO '" + employee.getLogin() + "'@'localhost' IDENTIFIED BY '" + employee.getPassword() + "'";
+            String query = "GRANT ALL PRIVILEGES ON *.* TO '" + employee.getLogin() + "'@'localhost'";
             statement3.execute(query);
 
 
